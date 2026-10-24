@@ -89,67 +89,82 @@ function escapeHTML(s) {
   }[c]));
 }
 
+const gamemodes = ["Spear", "Mace", "Sword", "CPvP", "NethPot", "UHC", "SMP", "Axe"];
+const tierNames = ["HT1", "LT1", "HT2", "LT2", "HT3", "LT3", "HT4", "LT4", "HT5", "LT5"];
+
+let players = [];
+try {
+  players = JSON.parse(localStorage.getItem("pktierplayers") || "[]");
+} catch (e) {
+  players = [];
+}
+
+players = players.map(p => ({
+  name: p.name || "",
+  tiers: p.tiers || (p.tier ? { Sword: p.tier } : {})
+}));
+
+function savePlayers() {
+  localStorage.setItem("pktierplayers", JSON.stringify(players));
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
 function render() {
-  const searchBox = document.getElementById("search");
   const rankings = document.getElementById("rankings");
   if (!rankings) return;
 
-  const q = searchBox ? searchBox.value.toLowerCase() : "";
+  const search = document.getElementById("search");
+  const q = search ? search.value.toLowerCase() : "";
 
-  rankings.innerHTML = gamemodes.map(mode => {
-    const list = players.filter(p =>
-      p.name.toLowerCase().includes(q) &&
-      p.tiers && p.tiers[mode]
-    );
+  rankings.innerHTML = gamemodes.map(mode => `
+    <section class="tier">
+      <h2>${mode}</h2>
+      ${tierNames.map(tier => {
+        const list = players.filter(p =>
+          p.name.toLowerCase().includes(q) &&
+          p.tiers[mode] === tier
+        );
 
-    return `
-      <section class="tier">
-        <h2>${mode}</h2>
-        ${tierNames.map(tier => {
-          const tierPlayers = list.filter(p => p.tiers[mode] === tier);
-          return `
-            <div class="tier">
-              <div class="rank">${tier}</div>
-              <div class="players">
-                ${tierPlayers.map(p => `
-                  <span class="player">
-                    <img
-                      src="https://mc-heads.net/avatar/${encodeURIComponent(p.name)}/32"
-                      alt=""
-                      width="32"
-                      height="32"
-                      style="vertical-align:middle"
-                      onerror="this.style.display='none'">
-                    ${escapeHTML(p.name)}
-                  </span>
-                `).join("") || '<span class="small">No players</span>'}
-              </div>
+        return `
+          <div class="tier">
+            <div class="rank">${tier}</div>
+            <div class="players">
+              ${list.map(p => `
+                <span class="player">
+                  <img src="https://mc-heads.net/avatar/${encodeURIComponent(p.name)}/32"
+                       width="32" height="32" alt="">
+                  ${escapeHTML(p.name)}
+                </span>
+              `).join("") || '<span class="small">No players yet</span>'}
             </div>
-          `;
-        }).join("")}
-      </section>
-    `;
-  }).join("");
+          </div>
+        `;
+      }).join("")}
+    </section>
+  `).join("");
 }
 
 function addPlayer() {
   const nameInput = document.getElementById("name");
-  const modeInput = document.getElementById("gamemode");
   const tierInput = document.getElementById("tier");
   const message = document.getElementById("message");
 
-  if (!nameInput || !modeInput || !tierInput) {
-    if (message) message.textContent =
-      "The player form needs gamemode and tier fields added first.";
-    return;
-  }
+  let modeInput = document.getElementById("gamemode");
+
+  if (!nameInput || !tierInput) return;
 
   const name = nameInput.value.trim();
-  const mode = modeInput.value;
   const tier = tierInput.value;
+  const mode = modeInput ? modeInput.value : "Sword";
 
   if (!name) {
-    if (message) message.textContent = "Enter a Minecraft username first.";
+    if (message) message.textContent = "Enter a Minecraft username.";
     return;
   }
 
@@ -168,12 +183,28 @@ function addPlayer() {
   savePlayers();
   nameInput.value = "";
 
-  if (message) message.textContent = name + " updated for " + mode + ".";
+  if (message) message.textContent = name + " added to " + mode + "!";
   render();
 }
 
-render();
+const modeSelect = document.getElementById("gamemode");
+if (modeSelect) {
+  modeSelect.innerHTML = gamemodes.map(mode =>
+    `<option value="${mode}">${mode}</option>`
+  ).join("");
+}
 
+const tierSelect = document.getElementById("tier");
+if (tierSelect) {
+  tierSelect.innerHTML = tierNames.map(tier =>
+    `<option value="${tier}">${tier}</option>`
+  ).join("");
+}
+
+const searchBox = document.getElementById("search");
+if (searchBox) searchBox.addEventListener("input", render);
+
+render();
 </script>
 </body>
 </html>
