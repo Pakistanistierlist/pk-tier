@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PK TIER | Minecraft PvP Rankings</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090d16;color:#f4f6ff;font-family:Arial,sans-serif}
+header{padding:25px 8%;border-bottom:1px solid #242b3d;background:#0d1220}
+.logo{font-size:30px;font-weight:900;letter-spacing:3px}
+.logo span{color:#6c8cff}
+header p{color:#9ba8c5}
+main{max-width:1100px;margin:35px auto;padding:0 18px}
+.hero{padding:30px;border:1px solid #28334c;border-radius:18px;background:linear-gradient(120deg,#151f39,#101522)}
+.hero h1{font-size:clamp(28px,5vw,46px);margin:0 0 12px}
+.hero p{color:#a9b5d0}
+input,select,button{padding:12px;border-radius:9px;border:1px solid #303a52;background:#111827;color:white}
+input{width:100%;margin:15px 0}
+.tier{display:grid;grid-template-columns:90px 1fr;margin:12px 0;border:1px solid #30384b;border-radius:10px;overflow:hidden;min-height:70px}
+.rank{display:grid;place-items:center;font-size:19px;font-weight:bold;color:#080d16}
+.players{padding:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.player{background:#202a40;border:1px solid #34415d;border-radius:8px;padding:9px 12px}
+.admin{margin-top:30px;padding:22px;border:1px solid #30384b;border-radius:14px}
+.admin h2{margin-top:0}
+.admin input,.admin select{margin:5px 0 12px}
+button{cursor:pointer;background:#5879ff;border:0;font-weight:bold}
+button:hover{filter:brightness(1.15)}
+.small{color:#93a0bb;font-size:13px}
+@media(max-width:500px){.tier{grid-template-columns:65px 1fr}.logo{font-size:24px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">PK <span>TIER</span></div>
+  <p>PAKISTAN MINECRAFT PVP RANKINGS</p>
+</header>
+<main>
+<section class="hero">
+  <h1>Minecraft PvP Tier List</h1>
+  <p>Pakistan's PvP community. Tested players. Earned tiers.</p>
+  <input id="search" placeholder="Search Minecraft player..." oninput="render()">
+</section>
+<h2>🏆 Player Rankings</h2>
+<div id="rankings"></div>
+<section class="admin">
+  <h2>Admin — Add a Player</h2>
+  <p class="small">Add players after testing them. Changes save in this browser.</p>
+  <input id="name" placeholder="Minecraft username">
+  <select id="tier">
+    <option>HT1</option><option>LT1</option>
+    <option>HT2</option><option>LT2</option>
+    <option>HT3</option><option>LT3</option>
+    <option>HT4</option><option>LT4</option>
+    <option>HT5</option><option>LT5</option>
+  </select>
+  <button onclick="addPlayer()">Add Player</button>
+  <p class="small" id="message"></p>
+</section>
+</main>
+<script>
+const tiers=["HT1","LT1","HT2","LT2","HT3","LT3","HT4","LT4","HT5","LT5"];
+const colors=["#ff6262","#ff9b55","#ffdb63","#b4ec65","#61db9b","#5ce1dc","#69a8ff","#8d91ff","#c18aff","#ed8bd0"];
+let players=[];
+try{players=JSON.parse(localStorage.getItem("pktierplayers")||"[]")}catch(e){}
+function render(){
+ const q=document.getElementById("search").value.toLowerCase();
+ document.getElementById("rankings").innerHTML=tiers.map((t,i)=>{
+ const list=players.filter(p=>p.tier===t&&p.name.toLowerCase().includes(q));
+ return `<div class="tier"><div class="rank" style="background:${colors[i]}">${t}</div><div class="players">${list.length?list.map(p=>`<span class="player">${escapeHTML(p.name)}</span>`).join(""):'<span class="small">No tested players yet</span>'}</div></div>`;
+ }).join("");
+}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function addPlayer(){
+ const name=document.getElementById("name").value.trim();
+ const tier=document.getElementById("tier").value;
+ if(!name){document.getElementById("message").textContent="Enter a Minecraft username first.";return}
+ if(players.some(p=>p.name.toLowerCase()===name.toLowerCase())){document.getElementById("message").textContent="This player is already listed.";return}
+ players.push({name,tier});
+ try{localStorage.setItem("pktierplayers",JSON.stringify(players))}catch(e){}
+ document.getElementById("name").value="";
+ document.getElementById("message").textContent=name+" added to "+tier+".";
+ render();
+}
+render();
+</script>
+</body>
+</html>
