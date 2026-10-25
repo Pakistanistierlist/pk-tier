@@ -4,167 +4,353 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PK TIER | Minecraft PvP Rankings</title>
+<title>PK Tier | Minecraft Rankings</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#090d16;color:#f4f6ff;font-family:Arial,sans-serif}
-header{padding:25px 8%;border-bottom:1px solid #242b3d;background:#0d1220}
-.logo{font-size:30px;font-weight:900;letter-spacing:3px}
-.logo span{color:#6c8cff}
-header p{color:#9ba8c5}
-main{max-width:1100px;margin:35px auto;padding:0 18px}
-.hero{padding:30px;border:1px solid #28334c;border-radius:18px;background:linear-gradient(120deg,#151f39,#101522)}
-.hero h1{font-size:clamp(28px,5vw,46px);margin:0 0 12px}
-.hero p{color:#a9b5d0}
-input,select,button{padding:12px;border-radius:9px;border:1px solid #303a52;background:#111827;color:white}
-input{width:100%;margin:15px 0}
-.tier{display:grid;grid-template-columns:90px 1fr;margin:12px 0;border:1px solid #30384b;border-radius:10px;overflow:hidden;min-height:70px}
-.rank{display:grid;place-items:center;font-size:19px;font-weight:bold;color:#080d16}
-.players{padding:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.player{background:#202a40;border:1px solid #34415d;border-radius:8px;padding:9px 12px}
-.admin{margin-top:30px;padding:22px;border:1px solid #30384b;border-radius:14px}
-.admin h2{margin-top:0}
-.admin input,.admin select{margin:5px 0 12px}
-button{cursor:pointer;background:#5879ff;border:0;font-weight:bold}
-button:hover{filter:brightness(1.15)}
-.small{color:#93a0bb;font-size:13px}
-@media(max-width:500px){.tier{grid-template-columns:65px 1fr}.logo{font-size:24px}}
+:root {
+  --bg: #090d16;
+  --panel: #111827;
+  --border: #273249;
+  --text: #f4f6ff;
+  --muted: #98a6c2;
+  --blue: #6485ff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+
+header {
+  padding: 22px 6%;
+  background: #0d1321;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.logo span { color: var(--blue); }
+
+header p {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+main {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 16px;
+}
+
+.hero, .panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 22px;
+}
+
+.hero {
+  background: linear-gradient(125deg, #172444, #101522);
+}
+
+h1 { font-size: clamp(28px, 5vw, 44px); margin: 0 0 10px; }
+h2 { font-size: 21px; }
+p { line-height: 1.5; }
+
+.muted, .small { color: var(--muted); }
+
+input, select, button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 9px;
+  border: 1px solid #34415d;
+  background: #0b1120;
+  color: white;
+  font-size: 14px;
+}
+
+input, select { margin: 7px 0 14px; }
+
+button {
+  background: var(--blue);
+  border: 0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover { filter: brightness(1.12); }
+
+.modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 18px 0;
+}
+
+.mode-btn {
+  width: auto;
+  padding: 11px 15px;
+  background: #151e30;
+  border: 1px solid var(--border);
+}
+
+.mode-btn.active {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.tier {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  margin: 10px 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 65px;
+}
+
+.rank {
+  display: grid;
+  place-items: center;
+  color: #080d16;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.players {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #202b40;
+  border: 1px solid #35435e;
+  border-radius: 8px;
+  padding: 7px 10px;
+}
+
+.player img {
+  width: 28px;
+  height: 28px;
+  image-rendering: pixelated;
+}
+
+.admin { margin-top: 30px; }
+
+@media (max-width: 500px) {
+  header { padding: 20px; }
+  .logo { font-size: 25px; }
+  .hero, .panel { padding: 17px; }
+  .tier { grid-template-columns: 60px 1fr; }
+  .mode-btn { padding: 10px; font-size: 12px; }
+}
 </style>
 </head>
+
 <body>
+
 <header>
-  <div class="logo">PK <span>TIERS</span></div>
+  <div class="logo">PK <span>TIER</span></div>
   <p>PAKISTAN MINECRAFT PVP RANKINGS</p>
 </header>
+
 <main>
-<section class="hero">
-  <h1>Minecraft PvP Tier List</h1>
-  <p>Pakistan's PvP community. Tested players. Earned tiers.</p>
-  <input id="search" placeholder="Search Minecraft player..." oninput="render()">
-</section>
-<h2>🏆 Player Rankings</h2>
-<div id="rankings"></div>
-<section class="admin">
-  <h2>Admin — Add a Player</h2>
-  <p class="small">Add players after testing them. Changes save in this browser.</p>
-  <input id="name" placeholder="Minecraft username">
-  <select id="tier">
-    <option>HT1</option><option>LT1</option>
-    <option>HT2</option><option>LT2</option>
-    <option>HT3</option><option>LT3</option>
-    <option>HT4</option><option>LT4</option>
-    <option>HT5</option><option>LT5</option>
-  </select>
-  <button onclick="addPlayer()">Add Player</button>
-  <p class="small" id="message"></p>
-</section>
+  <section class="hero">
+    <h1>Minecraft PvP Rankings</h1>
+    <p class="muted">
+      Pakistan's Minecraft PvP community.
+      Discover players and their tiers.
+    </p>
+    <input id="search" placeholder="Search player username...">
+  </section>
+
+  <section class="panel">
+    <h2>🏆 Player Rankings</h2>
+    <p class="muted small">Choose a gamemode to view its rankings.</p>
+    <div id="modes" class="modes"></div>
+    <div id="rankings"></div>
+  </section>
+
+  <section class="panel admin">
+    <h2>Admin — Add or Update Player</h2>
+    <p class="muted small">
+      This demo saves changes in this browser only.
+    </p>
+
+    <label for="name">Minecraft Username</label>
+    <input id="name" placeholder="Enter player username">
+
+    <label for="gamemode">Gamemode</label>
+    <select id="gamemode"></select>
+
+    <label for="tierSelect">Player Tier</label>
+    <select id="tierSelect"></select>
+
+    <button id="addButton">Add / Update Player</button>
+    <p id="message" class="small"></p>
+  </section>
 </main>
+
 <script>
-const tiers=["HT1","LT1","HT2","LT2","HT3","LT3","HT4","LT4","HT5","LT5"];
-const colors=["#ff6262","#ff9b55","#ffdb63","#b4ec65","#61db9b","#5ce1dc","#69a8ff","#8d91ff","#c18aff","#ed8bd0"];
-let players=[];
-try{players=JSON.parse(localStorage.getItem("pktierplayers")||"[]")}catch(e){}
+const gamemodes = [
+  "CPvP",
+  "Sword",
+  "NethPot",
+  "Spear",
+  "Mace",
+  "UHC",
+  "Lifesteal",
+  "TNT Minecart"
+];
 
-const gamemodes = ["Spear", "Mace", "Sword", "CPvP", "NethPot", "UHC", "SMP", "Axe"];
-const tierNames = ["HT1", "LT1", "HT2", "LT2", "HT3", "LT3", "HT4", "LT4", "HT5", "LT5"];
+const tiers = [
+  "HT1", "LT1",
+  "HT2", "LT2",
+  "HT3", "LT3",
+  "HT4", "LT4",
+  "HT5", "LT5"
+];
 
+const colors = [
+  "#ff6262", "#ff9855",
+  "#ffdb63", "#b5eb65",
+  "#61db9b", "#5ce1dc",
+  "#69a8ff", "#8d91ff",
+  "#c18aff", "#ed8bd0"
+];
+
+let activeMode = "CPvP";
 let players = [];
+
 try {
-  players = JSON.parse(localStorage.getItem("pktierplayers") || "[]");
+  const saved = JSON.parse(
+    localStorage.getItem("pktierplayers") || "[]"
+  );
+
+  if (Array.isArray(saved)) {
+    players = saved
+      .filter(p => p && typeof p.name === "string")
+      .map(p => ({
+        name: p.name,
+        tiers: p.tiers ||
+          (p.tier ? { Sword: p.tier } : {})
+      }));
+  }
 } catch (e) {
   players = [];
 }
 
+const $ = id => document.getElementById(id);
+
 function savePlayers() {
-  localStorage.setItem("pktierplayers", JSON.stringify(players));
+  localStorage.setItem(
+    "pktierplayers",
+    JSON.stringify(players)
+  );
 }
 
-function escapeHTML(s) {
-  return String(s).replace(/[&<>"']/g, c => ({
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;"
-  }[c]));
+  })[char]);
 }
 
-const gamemodes = ["Spear", "Mace", "Sword", "CPvP", "NethPot", "UHC", "SMP", "Axe"];
-const tierNames = ["HT1", "LT1", "HT2", "LT2", "HT3", "LT3", "HT4", "LT4", "HT5", "LT5"];
+function setupSelects() {
+  $("gamemode").innerHTML = gamemodes.map(mode =>
+    `<option value="${escapeHTML(mode)}">${escapeHTML(mode)}</option>`
+  ).join("");
 
-let players = [];
-try {
-  players = JSON.parse(localStorage.getItem("pktierplayers") || "[]");
-} catch (e) {
-  players = [];
+  $("tierSelect").innerHTML = tiers.map(tier =>
+    `<option value="${tier}">${tier}</option>`
+  ).join("");
 }
 
-players = players.map(p => ({
-  name: p.name || "",
-  tiers: p.tiers || (p.tier ? { Sword: p.tier } : {})
-}));
+function renderModes() {
+  $("modes").innerHTML = gamemodes.map(mode => `
+    <button
+      class="mode-btn ${mode === activeMode ? "active" : ""}"
+      data-mode="${escapeHTML(mode)}">
+      ${escapeHTML(mode)}
+    </button>
+  `).join("");
 
-function savePlayers() {
-  localStorage.setItem("pktierplayers", JSON.stringify(players));
+  $("modes").querySelectorAll("button").forEach(button => {
+    button.addEventListener("click", () => {
+      activeMode = button.dataset.mode;
+      render();
+    });
+  });
 }
 
-function escapeHTML(s) {
-  return String(s).replace(/[&<>"']/g, c => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;",
-    '"': "&quot;", "'": "&#39;"
-  }[c]));
+function renderRankings() {
+  const query = $("search").value.trim().toLowerCase();
+
+  $("rankings").innerHTML = `
+    <h2>${escapeHTML(activeMode)} Rankings</h2>
+    ${tiers.map((tier, index) => {
+      const list = players.filter(player =>
+        player.name.toLowerCase().includes(query) &&
+        player.tiers[activeMode] === tier
+      );
+
+      return `
+        <div class="tier">
+          <div class="rank"
+               style="background:${colors[index]}">
+            ${tier}
+          </div>
+          <div class="players">
+            ${list.length ? list.map(player => `
+              <div class="player">
+                <img
+                  src="https://mc-heads.net/avatar/${encodeURIComponent(player.name)}/32"
+                  alt=""
+                  loading="lazy">
+                <span>${escapeHTML(player.name)}</span>
+              </div>
+            `).join("") : `
+              <span class="small">No players ranked yet</span>
+            `}
+          </div>
+        </div>
+      `;
+    }).join("")}
+  `;
 }
 
 function render() {
-  const rankings = document.getElementById("rankings");
-  if (!rankings) return;
-
-  const search = document.getElementById("search");
-  const q = search ? search.value.toLowerCase() : "";
-
-  rankings.innerHTML = gamemodes.map(mode => `
-    <section class="tier">
-      <h2>${mode}</h2>
-      ${tierNames.map(tier => {
-        const list = players.filter(p =>
-          p.name.toLowerCase().includes(q) &&
-          p.tiers[mode] === tier
-        );
-
-        return `
-          <div class="tier">
-            <div class="rank">${tier}</div>
-            <div class="players">
-              ${list.map(p => `
-                <span class="player">
-                  <img src="https://mc-heads.net/avatar/${encodeURIComponent(p.name)}/32"
-                       width="32" height="32" alt="">
-                  ${escapeHTML(p.name)}
-                </span>
-              `).join("") || '<span class="small">No players yet</span>'}
-            </div>
-          </div>
-        `;
-      }).join("")}
-    </section>
-  `).join("");
+  renderModes();
+  renderRankings();
 }
 
 function addPlayer() {
-  const nameInput = document.getElementById("name");
-  const tierInput = document.getElementById("tier");
-  const message = document.getElementById("message");
-
-  let modeInput = document.getElementById("gamemode");
-
-  if (!nameInput || !tierInput) return;
-
-  const name = nameInput.value.trim();
-  const tier = tierInput.value;
-  const mode = modeInput ? modeInput.value : "Sword";
+  const name = $("name").value.trim();
+  const mode = $("gamemode").value;
+  const tier = $("tierSelect").value;
 
   if (!name) {
-    if (message) message.textContent = "Enter a Minecraft username.";
+    $("message").textContent = "Enter a Minecraft username first.";
     return;
   }
 
@@ -178,33 +364,25 @@ function addPlayer() {
   }
 
   if (!player.tiers) player.tiers = {};
+
   player.tiers[mode] = tier;
+  activeMode = mode;
 
   savePlayers();
-  nameInput.value = "";
 
-  if (message) message.textContent = name + " added to " + mode + "!";
+  $("name").value = "";
+  $("message").textContent =
+    name + " ranked in " + mode + " as " + tier + ".";
+
   render();
 }
 
-const modeSelect = document.getElementById("gamemode");
-if (modeSelect) {
-  modeSelect.innerHTML = gamemodes.map(mode =>
-    `<option value="${mode}">${mode}</option>`
-  ).join("");
-}
+$("search").addEventListener("input", renderRankings);
+$("addButton").addEventListener("click", addPlayer);
 
-const tierSelect = document.getElementById("tier");
-if (tierSelect) {
-  tierSelect.innerHTML = tierNames.map(tier =>
-    `<option value="${tier}">${tier}</option>`
-  ).join("");
-}
-
-const searchBox = document.getElementById("search");
-if (searchBox) searchBox.addEventListener("input", render);
-
+setupSelects();
 render();
 </script>
+
 </body>
 </html>
