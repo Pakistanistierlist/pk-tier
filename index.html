@@ -51,26 +51,7 @@ main{margin:0 14px 40px;background:linear-gradient(140deg,#111a28,#0d1521);borde
   <div id="player-list"></div>
 </main>
 <div class="profile-backdrop" id="profile-backdrop" role="dialog" aria-modal="true" aria-label="Player profile"><div class="profile-card"><button class="profile-close" id="profile-close" aria-label="Close profile">×</button><img class="profile-avatar" id="profile-avatar" alt="Player skin"><div class="profile-name" id="profile-name"></div><div class="profile-title" id="profile-title"></div><div class="profile-region" id="profile-region"></div><div class="profile-links"><span>◧ &nbsp; Minecraft Profile</span><span>PK-Tier Player</span></div><div class="profile-section">POSITION</div><div class="profile-position" id="profile-position"></div><div class="profile-section">TIERS</div><div class="profile-tiers" id="profile-tiers"></div></div></div>
-<section class="admin" id="events">
-  <h2>Admin — Add or update player</h2>
-  <p class="hint">This starter site saves entries and uploaded skin-render images in this browser only; other visitors will not see local edits automatically. Upload your normal Minecraft skin texture PNG (usually 64×64). PK-Tier will try to render it as a 3D character automatically in a Marlow-style standing pose. Keep uploads under 1.5 MB. This renderer loads from a CDN, so internet is needed.</p>
-  <form id="player-form" class="form-grid">
-    <input class="field" id="name" placeholder="Minecraft username" required maxlength="32">
-    <select class="field" id="region"><option value="PK">PK — Pakistan</option><option value="NA">NA</option><option value="EU">EU</option><option value="ME">ME</option><option value="AS">AS</option></select>
-    <select class="field" id="mode-select"></select>
-    <select class="field" id="skin-style"><option value="bust">Skin display: MCTiers-style bust</option><option value="full">Skin display: Full body</option></select>
-    <input class="field" id="skin-upload" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Upload Minecraft skin texture PNG">
-    <select class="field" id="tier-select"><option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option><option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option><option>HT5</option><option>LT5</option></select>
-    <input class="field" id="points" type="number" min="0" max="99999" placeholder="Points (optional)">
-    <input class="field" id="title" placeholder="Title (optional, e.g. Combat Master)">
-    <input class="field" id="server-input" placeholder="Server IP (optional)">
-    <button class="primary" type="submit">Save player</button>
-  </form>
-  <h3>Manage Players</h3>
-  <p class="hint">Edit ya delete karne ke liye neeche player select karo.</p>
-  <div id="admin-player-list"></div>
-  <p id="message" class="hint" aria-live="polite"></p>
-</section>
+
 <div class="footer">PK-Tier · Unofficial Minecraft PvP community rankings</div>
 <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.2/bundles/skinview3d.bundle.js"></script>
 <script>
