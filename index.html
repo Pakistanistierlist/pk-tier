@@ -98,7 +98,23 @@ function getTier(p,m){return p.tiers?.[m]||""}
 function render(){
  renderModes();
  const q=document.getElementById("search").value.trim().toLowerCase();
- const shown=players.filter(p=>p.name.toLowerCase().includes(q)).sort((a,b)=>(Number(b.points)||0)-(Number(a.points)||0));
+ const tierScore = tier => {
+   if (!tier) return 999;
+   const match = /^(HT|LT)([1-5])$/.exec(tier);
+   if (!match) return 999;
+   const level = Number(match[2]);
+   return (level - 1) * 2 + (match[1] === "HT" ? 0 : 1);
+ };
+ const shown=players
+   .filter(p=>p.name.toLowerCase().includes(q))
+   .filter(p=>activeMode==="Overall" ? Object.values(p.tiers||{}).some(Boolean) : Boolean(p.tiers?.[activeMode]))
+   .sort((a,b)=>{
+     if(activeMode!=="Overall"){
+       const diff=tierScore(a.tiers?.[activeMode])-tierScore(b.tiers?.[activeMode]);
+       if(diff!==0)return diff;
+     }
+     return (Number(b.points)||0)-(Number(a.points)||0);
+   });
  document.getElementById("page-title").textContent=activeMode==="Overall"?"Overall Minecraft PvP Rankings":activeMode+" Rankings";
  document.getElementById("page-sub").textContent=activeMode==="Overall"?`Players ranked by points across ${modes.length-1} gamemodes`:`Players ranked in ${activeMode}`;
  if(!shown.length){playerList.innerHTML='<div class="empty">No players found. Add a player below.</div>';renderAdminPlayers();return}
