@@ -303,6 +303,7 @@ function renderModes() {
   });
 }
 
+
 function renderRankings() {
   const query = $("search").value.trim().toLowerCase();
 
@@ -316,8 +317,7 @@ function renderRankings() {
 
       return `
         <div class="tier">
-          <div class="rank"
-               style="background:${colors[index]}">
+          <div class="rank" style="background:${colors[index]}">
             ${tier}
           </div>
           <div class="players">
@@ -328,6 +328,12 @@ function renderRankings() {
                   alt=""
                   loading="lazy">
                 <span>${escapeHTML(player.name)}</span>
+                <button
+                  class="remove-player"
+                  data-name="${escapeHTML(player.name)}"
+                  style="width:30px;padding:6px;background:#d9364f">
+                  ×
+                </button>
               </div>
             `).join("") : `
               <span class="small">No players ranked yet</span>
@@ -337,9 +343,30 @@ function renderRankings() {
       `;
     }).join("")}
   `;
+
+  $("rankings").querySelectorAll(".remove-player").forEach(button => {
+    button.addEventListener("click", () => {
+      const name = button.dataset.name;
+      const player = players.find(p =>
+        p.name.toLowerCase() === name.toLowerCase()
+      );
+
+      if (!player || !player.tiers[activeMode]) return;
+
+      if (!confirm("Remove " + name + " from " + activeMode + "?")) return;
+
+      delete player.tiers[activeMode];
+
+      players = players.filter(p =>
+        Object.keys(p.tiers).length > 0
+      );
+
+      savePlayers();
+      render();
+    });
+  });
 }
 
-function render() {
   renderModes();
   renderRankings();
 }
